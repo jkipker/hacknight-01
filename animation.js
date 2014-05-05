@@ -70,8 +70,11 @@ function Particle() {
 
 	// Now the radius of the particles. I want all of
 	// them to be equal in size so no Math.random() here..
-	this.radius = 3;
-	//this.radius = 1 + Math.random() * 2;
+	this.radius = 1;
+
+	// Define the number of connections this particle has
+	// Start all particles with zero connections
+	this.connections = 0;
 
 	// This is the method that will draw the Particle on the
 	// canvas. It is using the basic fillStyle, then we start
@@ -173,6 +176,14 @@ function distance(p1, p2) {
 	// then the minimum distance
 	if(dist <= minDist) {
 
+		// Register the particle connections
+		p1.connections += 1;
+		p2.connections += 1;
+
+		// Increase particle radius based on qty of connections
+		p1.radius = p1.connections * 1.2;
+		p2.radius = p2.connections * 1.2;
+
 		// Draw the line
 		ctx.beginPath();
 		ctx.strokeStyle = "rgba(255,255,255,"+ (1.2-dist/minDist) +")";
@@ -180,19 +191,19 @@ function distance(p1, p2) {
 		ctx.lineTo(p2.x, p2.y);
 		ctx.stroke();
 		ctx.closePath();
+	} else {
+		// Register the particle connections
+		p1.connections = p1.connections > 1 ? p1.connections - 1 : 1;
+		p2.connections = p2.connections > 1 ? p2.connections - 1 : 1;
 
-		// Some acceleration for the partcles
-		// depending upon their distance
-		var ax = dx/10000,
-			ay = dy/10000;
-
-		// Apply the acceleration on the particles
-		//p1.vx -= ax;
-		//p1.vy -= ay;
-
-		//p2.vx += ax;
-		//p2.vy += ay;
+        // Decrease particle radius based on qty of connections
+		p1.radius = p1.connections;
+		p2.radius = p2.connections;
 	}
+
+	// Redraw the particles to update the radius
+	p1.draw();
+	p2.draw();
 }
 
 // Start the main animation loop using requestAnimFrame
