@@ -11,6 +11,8 @@ window.requestAnimFrame = (function(){
 })();
 
 // Initializing the canvas
+
+
 // I am using native JS here, but you can use jQuery,
 // Mootools or anything you want
 var canvas = document.getElementById("canvas");
